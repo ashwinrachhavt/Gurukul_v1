@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Sandpack, SandpackProvider, SandpackCodeEditor, SandpackThemeProvider } from "@codesandbox/sandpack-react";
 import Editor from "@/components/NewCodeEditor";
+import NewEditor from "@/components/PlayGround";
 
 
 const ProblemDetail = () => {
@@ -18,7 +19,7 @@ const ProblemDetail = () => {
   const [problem, setProblem] = useState(null);
   const [showHints, setShowHints] = useState(false);
   const [debugInfo, setDebugInfo] = useState({});
-
+  const [showHint, setShowHint] = useState(null);
   useEffect(() => {
     if (id) {
       setDebugInfo(prev => ({ ...prev, id }));
@@ -55,30 +56,26 @@ function solve() {
   };
 
   return (
-    <div className="problem-container">
-      <h1 className="problem-title">{problem.Title}</h1>
-      <p className="problem-description">{problem.Problem_Description}</p>
-      <p className="test-cases">{problem.Test_Cases}</p>
-      <button className="hint-toggle-btn" onClick={() => setShowHints(!showHints)}>Show Hints</button>
-      {showHints && (
-          <div className="hints">
-              <div className="hint">{problem.Hints_1}</div>
-              <div className="hint">{problem.Hint_2}</div>
-              <div className="hint">{problem.Hint_3}</div>
-          </div>
-      )}
-       {/* <div className="editor-section">
-        <SandpackProvider template="nextjs" customSetup={{ files: initialCode }}>
-            <SandpackThemeProvider>
-                <SandpackCodeEditor showLineNumbers />
-            </SandpackThemeProvider>
-        </SandpackProvider>
-    </div> */}
-      <div className="editor-section">
-          <Editor />
+    <div className="problem-container p-6 bg-white shadow-lg rounded-lg mx-4 my-6">
+      <h1 className="problem-title text-2xl font-bold mb-4">{problem.Title}</h1>
+      <p className="problem-description text-gray-700 mb-4">{problem.Problem_Description}</p>
+      <p className="test-cases text-gray-600 mb-4">{problem.Test_Cases}</p>
+
+      <div className="hints-section mb-4">
+        <button className="hint-toggle-btn mr-2 bg-blue-500 text-white px-4 py-2 rounded" onClick={() => setShowHint(1)}>Hint 1</button>
+        <button className="hint-toggle-btn mr-2 bg-blue-500 text-white px-4 py-2 rounded" onClick={() => setShowHint(2)}>Hint 2</button>
+        <button className="hint-toggle-btn bg-blue-500 text-white px-4 py-2 rounded" onClick={() => setShowHint(3)}>Hint 3</button>
       </div>
 
-      <button className="submit-btn">Submit</button>
+      {showHint === 1 && <div className="hint bg-gray-100 p-4 rounded mb-4">{problem.Hints_1}</div>}
+      {showHint === 2 && <div className="hint bg-gray-100 p-4 rounded mb-4">{problem.Hint_2}</div>}
+      {showHint === 3 && <div className="hint bg-gray-100 p-4 rounded mb-4">{problem.Hint_3}</div>}
+
+      <div className="editor-section mb-4">
+          <NewEditor />
+      </div>
+
+      <button className="submit-btn bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Submit</button>
     </div>
   );
 };

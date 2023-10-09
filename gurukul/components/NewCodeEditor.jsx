@@ -7,6 +7,8 @@ import ThemeDropdown from "../components/ThemeDropdown";
 import OutputWindow from "../components/OutputWindow";
 import CustomInput from "../components/CustomInput";
 import OutputDetails from "../components/OutputDetails";
+import Chatbox from "../components/Chatbox"
+
 
 const NewCodeEditor = () => {
   const [code, setCode] = useState("//Write your code here");
@@ -48,8 +50,9 @@ const NewCodeEditor = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row w-full justify-start px-4 mt-4">
-      <div className="flex flex-row w-full justify-between md:justify-start">
+    <div className="flex flex-col w-full justify-start px-4 mt-4">
+      {/* Language and Theme Dropdowns */}
+      <div className="flex flex-row w-full justify-between md:justify-start mb-4">
         <div className="md:px-4 py-2 px-2 w-5/12 md:w-auto">
           <LanguageDropdown onSelectChange={handleLanguageChange} />
         </div>
@@ -57,23 +60,35 @@ const NewCodeEditor = () => {
           <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
         </div>
       </div>
-      <div className="md:flex flex-col w-full md:w-8/12 md:h-full h-96 justify-start items-end">
-        <CodeEditor
-          onChange={onCodeChange}
-          language={language.value}
-          theme={theme.value}
-          code={code}
-        />
-      </div>
-      <div className="w-full md:w-4/12 p-4 ml-auto">
-        <OutputWindow outputDetails={outputDetails} />
-        <div className="flex flex-col items-end">
-          <CustomInput
-            customInput={customInput}
-            setCustomInput={setCustomInput}
+  
+      {/* Grid Container */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* Code Editor */}
+        <div className="p-4">
+          <CodeEditor
+            onChange={onCodeChange}
+            language={language.value}
+            theme={theme.value}
+            code={code}
           />
         </div>
-        <OutputDetails outputDetails={outputDetails} />
+  
+        {/* Nested Grid for Output and Samples */}
+        <div className="grid grid-rows-2 gap-4 p-4">
+          {/* Output Section */}
+          <div>
+            <OutputWindow outputDetails={outputDetails} />
+            <div className="flex flex-col items-end mb-4 p-5">
+              <Chatbox /> {/* Replaced CustomInput with ChatBox */}
+            </div>
+          </div>
+  
+          {/* Samples Section */}
+          <div>
+
+            <OutputDetails outputDetails={outputDetails} />
+          </div>
+        </div>
       </div>
     </div>
   );
