@@ -1,21 +1,32 @@
 //import Login from "@components/Login";
 //import ProblemsTable from "@components/ProblemsTable";
 "use client"
-import { Sandpack } from '@codesandbox/sandpack-react';
+//import { Sandpack } from '@codesandbox/sandpack-react';
 //import { nightOwl } from "@codesandbox/sandpack-themes";
-import ProblemsTable from "@components/ProblemsTable";
+//import ProblemsTable from "@components/ProblemsTable";
+//import DocsQA from "@components/DocsQA";
+import Link from 'next/link';
+
 const Home = () => (
   <section className='w-full flex-center flex-col'>
     <h1 className='head_text text-center'>
       Gurukul
       <br className='max-md:hidden' />
-      <span className='orange_gradient text-center'> AI-Powered Prompts</span>
+      <span className='orange_gradient text-center'> AI-Powered Code Mentor</span>
     </h1>
     <p className='desc text-center'>
       An AI powered learning assistant Code Mentor for students to learn code.
     </p>
     {/* <Login /> */}
-    *<ProblemsTable />
+    {/* <ProblemsTable /> */}
+    <div className="flex justify-center space-x-4 mt-6">
+      <Link href="/docsqna" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+          Study
+      </Link>
+      <Link href="/problemstable" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+          Practice
+      </Link>
+    </div>
   </section>
 );
 

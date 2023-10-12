@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Sandpack, SandpackProvider, SandpackCodeEditor, SandpackThemeProvider } from "@codesandbox/sandpack-react";
-import Editor from "@/components/NewCodeEditor";
-import NewEditor from "@/components/PlayGround";
+import Editor from "../../../components/NewCodeEditor";
+import Landing from "../../../components/PlayGround";
 
 
 const ProblemDetail = () => {
@@ -72,10 +72,9 @@ function solve() {
       {showHint === 3 && <div className="hint bg-gray-100 p-4 rounded mb-4">{problem.Hint_3}</div>}
 
       <div className="editor-section mb-4">
-          <NewEditor />
+          <Landing />
       </div>
 
-      <button className="submit-btn bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Submit</button>
     </div>
   );
 };

@@ -85,80 +85,70 @@ const Landing = () => {
     setProcessing(true);
     const formData = {
       language_id: language.id,
-      // encode source code in base64
       source_code: btoa(code),
       stdin: btoa(customInput),
     };
     const options = {
       method: "POST",
-      url: process.env.JUDGE_RAPID_API_URL,
+      url: process.env.NEXT_PUBLIC_RAPID_API_URL,
       params: { base64_encoded: "true", fields: "*" },
       headers: {
         "content-type": "application/json",
         "Content-Type": "application/json",
-        "X-RapidAPI-Host": process.env.JUDGE_RAPID_API_HOST,
-        "X-RapidAPI-Key": process.env.JUDGE_RAPID_API_KEY,
+        "X-RapidAPI-Host": process.env.NEXT_PUBLIC_RAPID_API_HOST,
+        "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
       },
       data: formData,
     };
-
     axios
       .request(options)
       .then(function (response) {
-        console.log("res.data", response.data);
+        console.log("response data:", response.data);
         const token = response.data.token;
         checkStatus(token);
       })
       .catch((err) => {
         let error = err.response ? err.response.data : err;
-        // get error status
-        let status = err.response.status;
-        console.log("status", status);
-        if (status === 429) {
-          console.log("too many requests", status);
-
-          showErrorToast(
-            `Quota of 100 requests exceeded for the Day! Please read the blog on freeCodeCamp to learn how to setup your own RAPID API Judge0!`,
-            10000
-          );
-        }
         setProcessing(false);
-        console.log("catch block...", error);
+        console.log(error);
       });
   };
 
   const checkStatus = async (token) => {
     const options = {
       method: "GET",
-      url: process.env.JUDGE_RAPID_API_URL + "/" + token,
+      url: process.env.NEXT_PUBLIC_RAPID_API_URL + "/" + token,
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        "X-RapidAPI-Host": process.env.JUDGE_RAPID_API_HOST,
-        "X-RapidAPI-Key": process.env.JUDGE_RAPID_API_KEY,
+        "X-RapidAPI-Host": process.env.NEXT_PUBLIC_RAPID_API_HOST,
+        "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
       },
     };
     try {
       let response = await axios.request(options);
       let statusId = response.data.status?.id;
 
-      // Processed - we have a result
+      /*
+      status id = 1 => in queue
+      status id = 2 => processing
+      */
       if (statusId === 1 || statusId === 2) {
-        // still processing
         setTimeout(() => {
           checkStatus(token);
         }, 2000);
         return;
       } else {
+        //TO DO: HANDLE ALL STATUS IDS
         setProcessing(false);
         setOutputDetails(response.data);
-        showSuccessToast(`Compiled Successfully!`);
-        console.log("response.data", response.data);
+        showSuccessToast("Compiled Successfully");
+        console.log("response data", response.data);
         return;
       }
     } catch (err) {
-      console.log("err", err);
+      console.log("check status error", err);
       setProcessing(false);
-      showErrorToast();
+      showErrorToast("Something went wrong! Please try again later.");
     }
   };
 
@@ -238,22 +228,23 @@ const Landing = () => {
 
         <div className="right-container flex flex-shrink-0 w-[30%] flex-col">
           <OutputWindow outputDetails={outputDetails} />
+          <div className="flex flex-col items-end">
+
+          <button
+            onClick={handleCompile}
+            disabled={!code}
+            className={classnames(
+              "mt-4 border-2 border-black z-10 rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0)] px-4 py-2 hover:shadow transition duration-200 bg-white flex-shrink-0",
+              !code ? "opacity-50" : ""
+            )}
+          >
+            {processing ? "Processing..." : "Compile and Execute"}
+          </button>
+          </div>
           <div className="flex flex-col items-end mb-4 p-5">
               <Chatbox /> {/* Replaced CustomInput with ChatBox */}
             </div>
-          <div className="flex flex-col items-end">
 
-            <button
-              onClick={handleCompile}
-              disabled={!code}
-              className={classnames(
-                "mt-4 border-2 border-black z-10 rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0)] px-4 py-2 hover:shadow transition duration-200 bg-white flex-shrink-0",
-                !code ? "opacity-50" : ""
-              )}
-            >
-              {processing ? "Processing..." : "Compile and Execute"}
-            </button>
-          </div>
           {outputDetails && <OutputDetails outputDetails={outputDetails} />}
         </div>
       </div>
