@@ -26,7 +26,10 @@ yarn-error.log*
 
 # local env files
 .env*.local
-
+.env
+/workspaces/Gurukul_v1/gurukul/.env
+/workspaces/Gurukul_v1/gurukul/.env
+/gurukul/.env
 # vercel
 .vercel
 

@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata = {
   title: "Gurukul",
@@ -7,9 +8,14 @@ export const metadata = {
 
 const RootLayout = ({ children }) => (
   <html lang='en'>
+    <ClerkProvider>
     <body>
       {children}
     </body>
+    </ClerkProvider>
+
+  
+  
   </html>
 );
 
